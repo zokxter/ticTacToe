@@ -5,78 +5,83 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public class Game {
-	
+import lombok.Data;
+import ticTacToe.TicList.Xoxo;
+
+public @Data class Game {
+
 	private static final String COMPUTER = "computer";
-	
-	public enum Status  {
-		NOT_STARTED,
-		IN_PROGRESS,
-		FINISHED;
+
+	public enum Status {
+		NOT_STARTED, IN_PROGRESS, FINISHED;
 	}
-	
+
 	private int gameId;
-	private List<TicList> ticTacToeList;
+	private Board board;
 	private Status status;
-	private String player1;
-	private String player2;
+	private UserPlayer userPlayer;
+	private ComputerPlayer computer;
 	private String winner;
-	
+
 	public Game(int gameId, String player1, String player2) {
-		super();
 		this.gameId = gameId;
-		setTicTacToeList(new ArrayList<>());
+		this.board = new Board();
 		this.status = Status.NOT_STARTED;
-		if(player1.equals(COMPUTER)){
-			this.player1 = COMPUTER;
-			this.player2 = player2;
-		} else if(player2.equals(COMPUTER)){
-			this.player2 = COMPUTER;
-			this.player1 = player1;
+		if (player1.equals(COMPUTER) || (!player1.equals(COMPUTER) && !player2.equals(COMPUTER))) {
+			this.userPlayer = new UserPlayer(player1, Xoxo.O);
+			this.computer = new ComputerPlayer(COMPUTER, Xoxo.X, Strategy.getLevel(this.userPlayer));
 		} else {
-			this.player1 = player1;
-			this.player2 = player2;
+			this.userPlayer = new UserPlayer(player1, Xoxo.X);
+			this.computer = new ComputerPlayer(COMPUTER, Xoxo.O, Strategy.getLevel(this.userPlayer));
 		}
 		this.winner = "";
 	}
-	
+
 	public int getGameId() {
 		return gameId;
 	}
+
 	public void setGameId(int gameId) {
 		this.gameId = gameId;
 	}
-	
+
+	public Board getBoard() {
+		return board;
+	}
+
+	public void setBoard(Board board) {
+		this.board = board;
+	}
+
 	public Status getStatus() {
 		return status;
 	}
+
 	public void setStatus(Status status) {
 		this.status = status;
 	}
-	public String getPlayer1() {
-		return player1;
+
+	public UserPlayer getUserPlayer() {
+		return userPlayer;
 	}
-	public void setPlayer1(String player1) {
-		this.player1 = player1;
+
+	public void setUserPlayer(UserPlayer userPlayer) {
+		this.userPlayer = userPlayer;
 	}
-	public String getPlayer2() {
-		return player2;
+
+	public ComputerPlayer getComputer() {
+		return computer;
 	}
-	public void setPlayer2(String player2) {
-		this.player2 = player2;
+
+	public void setComputer(ComputerPlayer computer) {
+		this.computer = computer;
 	}
+
 	public String getWinner() {
 		return winner;
 	}
+
 	public void setWinner(String winner) {
 		this.winner = winner;
-	}
-
-	public List<TicList> getTicTacToeList() {
-		return ticTacToeList;
-	}
-
-	public void setTicTacToeList(List<TicList> ticTacToeList) {
-		this.ticTacToeList = ticTacToeList;
 	}
 }
